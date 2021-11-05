@@ -1,0 +1,19 @@
+{
+  "name": "akuma-mf-grpc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "action-grpc": "^1.0.0",
+    "akuma-microservice-framework": "^1.0.1"
+  },
+  "devDependencies": {
+    "@grpc/grpc-js": "^1.4.2"
+  }
+}
