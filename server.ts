@@ -1,19 +1,15 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-import {Action} from '../../adapters/interfaces/transport/action';
-import {SecurityAccess} from '../../adapters/interfaces/securityAccess';
-import {ProtocolServerAdapter} from '../../adapters/interfaces/transport/server';
+import {Action} from 'akuma-microservice-framework/adapters/action-protocol/transport/action';
+import {SecurityAccess} from 'akuma-microservice-framework/adapters/action-protocol/security-access';
+import {ProtocolServerAdapter} from 'akuma-microservice-framework/adapters/action-protocol/transport/server';
 import {initializeGRPC} from './grpc';
 import {Config} from './config';
-import { Application } from 'src/application/application';
 
 export const GRPCServer = {
   create: (
     actions: Map<string, Action>,
     configInstance: unknown,
     securityAccess: SecurityAccess,
-    app: Application
+    app: any
   ) => {
     const config = configInstance as Config;
     initializeGRPC(config, actions, securityAccess, app);
