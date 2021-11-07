@@ -1,6 +1,6 @@
-import {Action} from 'akuma-microservice-framework/adapters/action-protocol/transport/action';
-import {SecurityAccess} from 'akuma-microservice-framework/adapters/action-protocol/security-access';
-import {ProtocolServerAdapter} from 'akuma-microservice-framework/adapters/action-protocol/transport/server';
+import {Action} from 'akuma-microservice-framework/lib/adapters/action-protocol/transport/action';
+import {SecurityAccess} from 'akuma-microservice-framework/lib/adapters/action-protocol/security-access';
+import {ProtocolServerAdapter} from 'akuma-microservice-framework/lib/adapters/action-protocol/transport/server';
 import {initializeGRPC} from './grpc';
 import {Config} from './config';
 

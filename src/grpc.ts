@@ -1,12 +1,12 @@
 import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
-import {SecurityAccess} from 'akuma-microservice-framework/adapters/action-protocol/security-access';
+import {SecurityAccess} from 'akuma-microservice-framework/lib/adapters/action-protocol/security-access';
 import {ProtoGrpcType} from 'action-grpc/src/data';
 import {AppServiceHandlers} from 'action-grpc/src/appPackage/AppService';
-import {printStartService} from '../akuma-microservice-framework/infrastructure/display';
+import {printStartService} from 'akuma-microservice-framework/lib/infrastructure/display';
 import {Config} from './config';
-import {Action} from 'akuma-microservice-framework/adapters/action-protocol/transport/action';
-import {MicroServiceError} from 'akuma-microservice-framework/adapters/action-protocol/exception/microServiceError';
+import {Action} from 'akuma-microservice-framework/lib/adapters/action-protocol/transport/action';
+import {MicroServiceError} from 'akuma-microservice-framework/lib/adapters/action-protocol/exception/microServiceError';
 
 export const initializeGRPC = (
   config: Config,
@@ -57,6 +57,9 @@ function startServer(
   server.addService(appPackage.AppService.service, {
     sendToService: async (req, res) => {
       const start = metric.startTime();
+      if (!req.request.action) {
+        throw new MicroServiceError('not found property action', 'grpc-error')
+      }
       const actionName = req.request.action
       const action = actions.get(actionName);
       metric.sumOneRequest(actionName);
@@ -68,6 +71,9 @@ function startServer(
         return
       }
 
+      if (!req.request.token) {
+        throw new MicroServiceError('not found property token', 'grpc-error')
+      }
       if (!securityAccess.checkAccess(req.request.token)) {
         metric.calculeHistogramRequestDuration(start, actionName)
         res(null, {data: JSON.stringify({
@@ -83,8 +89,8 @@ function startServer(
         res(null, {data: JSON.stringify(dataResponse)});  
       } catch (error) {
         metric.calculeHistogramRequestDuration(start, actionName)
-        error = error as MicroServiceError 
-        res(null, {data: JSON.stringify(error.getData())});  
+        const msError = error as MicroServiceError 
+        res(null, {data: JSON.stringify(msError.getData())});  
       }
     },
   } as AppServiceHandlers);
